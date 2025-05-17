@@ -1,52 +1,123 @@
-<?php
-session_start();
+@extends('layouts.app')
+@section('content')
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h1 class="instagram-logo mb-4">Laravel Crud</h1>
+                    </div>
 
-$servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "simple_login";
+                    @if(session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
+                    @if(session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+                    <form action="{{ route('login.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <input type="email" 
+                                   class="form-control instagram-input @error('email') is-invalid @enderror" 
+                                   id="email" 
+                                   name="email" 
+                                   placeholder="Email"
+                                   value="{{ old('email') }}"
+                                   autofocus>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
+                        <div class="mb-3">
+                            <input type="password" 
+                                   class="form-control instagram-input @error('password') is-invalid @enderror" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Password">
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary instagram-button">
+                                Log in
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-body text-center py-3">
+                    <p class="mb-0">Don't have an account? 
+                        <a href="{{ route('register') }}" class="text-decoration-none fw-bold">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    $sql = "SELECT * FROM users WHERE username='$username'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['username'] = $username;
-            echo "Login successful! Welcome, " . $username;
-        } else {
-            echo "Invalid password.";
-        }
-    } else {
-        echo "No user found with that username.";
+@push('styles')
+<style>
+    body {
+        background-color: #fafafa;
     }
-}
-
-$conn->close();
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <form method="POST" action="">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-</body>
-</html>
+    .instagram-logo {
+        font-family: 'Instagram Sans Script', cursive;
+        font-size: 2.5rem;
+        font-weight: 600;
+        background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .instagram-input {
+        background-color: #fafafa;
+        border: 1px solid #dbdbdb;
+        border-radius: 3px;
+        padding: 9px 8px;
+        font-size: 0.9rem;
+    }
+    .instagram-input:focus {
+        border-color: #a8a8a8;
+        box-shadow: none;
+    }
+    .instagram-button {
+        background-color: #0095f6;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        padding: 7px 16px;
+    }
+    .instagram-button:hover {
+        background-color: #0086e6;
+    }
+    .card {
+        border-radius: 1px;
+    }
+    .text-muted {
+        color: #8e8e8e !important;
+    }
+    a {
+        color: #0095f6;
+    }
+    a:hover {
+        color: #0086e6;
+    }
+</style>
+@endpush
+@endsection
