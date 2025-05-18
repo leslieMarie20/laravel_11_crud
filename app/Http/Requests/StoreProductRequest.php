@@ -9,7 +9,7 @@ class StoreProductRequest extends FormRequest
  return true;
  }
  /**
- * Get the validation rules that apply to the request.
+ * 
  *
  * @return array<string, 
 \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -17,7 +17,7 @@ class StoreProductRequest extends FormRequest
  public function rules(): array
  {
  return [
- 'code' => 'required|string|max:50|unique:products,code',
+ 'code' => 'required|numeric|digits:4|unique:products,code|regex:/^(?!.*(.).*\1)\d{4}$/',
  'name' => 'required|string|max:250',
  'quantity' => 'required|integer|min:1|max:10000',
  'price' => 'required|numeric|min:0|max:999999.99',
