@@ -31,6 +31,20 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+        if (!Auth::attempt($credentials)) {
+       
+            if (!Auth::getProvider()->retrieveByCredentials(['email' => $request->email])) {
+                return back()->withErrors([
+                    'email' => 'The provided email does not exist.',
+                ])->withInput($request->only('email'));
+            }
+
+            
+            return back()->withErrors([
+                'password' => 'The provided password is incorrect.',
+            ])->withInput($request->only('email'));
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('products');
