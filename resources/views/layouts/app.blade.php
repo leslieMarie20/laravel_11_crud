@@ -16,7 +16,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.c
  @auth
  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
  <div class="container">
- <a class="navbar-brand" href="#">Laravel CRUD</a>
+ <a class="navbar-brand" href="#">Simple Laravel 11 CRUD Application Tutorial</a>
  <div class="ms-auto d-flex align-items-center">
  <span class="text-white me-3">Welcome, {{ Auth::user()->name }}</span>
  <form action="{{ route('logout') }}" method="POST" class="d-inline">
